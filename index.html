@@ -1,528 +1,478 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Resumo — Inteligência Artificial</title>
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#0d1117;--card:#1c2333;--bord:#30363d;
-      --a1:#c084fc;--a2:#a78bfa;--a3:#60a5fa;--a4:#34d399;--a5:#f59e0b;--a6:#fb7185;--a7:#38bdf8;
-      --text:#e6edf3;--muted:#8b949e;--tag:#21262d;
-    }
-    html{scroll-behavior:smooth}
-    body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
-    header{background:linear-gradient(135deg,#161b22,#0d1117);border-bottom:1px solid var(--bord);padding:3rem 2rem 2.5rem;text-align:center;position:relative;overflow:hidden}
-    header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(192,132,252,.15) 0%,transparent 65%);pointer-events:none}
-    .badge{display:inline-block;background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.3);color:var(--a1);font-size:.73rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .9rem;border-radius:999px;margin-bottom:1.1rem}
-    header h1{font-size:clamp(1.6rem,4vw,2.5rem);font-weight:800;background:linear-gradient(135deg,#e6edf3 30%,var(--a1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.45rem}
-    header p{color:var(--muted);font-size:.95rem;max-width:640px;margin:0 auto}
-    .mpills{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:1.4rem}
-    .mpill{background:var(--card);border:1px solid var(--bord);border-radius:999px;padding:.28rem .85rem;font-size:.78rem;color:var(--muted)}
-    .mpill span{color:var(--text);font-weight:600}
-    .tabs{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--bord);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 1rem}
-    .tabs::-webkit-scrollbar{display:none}
-    .tab{flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--muted);font-size:.83rem;font-weight:600;padding:.9rem 1.1rem;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap}
-    .tab:hover{color:var(--text)}
-    .tab.active{color:var(--a1);border-bottom-color:var(--a1)}
-    main{max-width:1000px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
-    .sec{display:none;animation:fi .3s ease}
-    .sec.active{display:block}
-    @keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .sh{display:flex;align-items:center;gap:.85rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--bord)}
-    .si{width:2.6rem;height:2.6rem;border-radius:12px;display:grid;place-items:center;font-size:1.25rem;flex-shrink:0}
-    .sh h2{font-size:1.45rem;font-weight:800}
-    .sh p{font-size:.84rem;color:var(--muted);margin-top:.15rem}
-    .grid{display:grid;gap:1.1rem}
-    .g2{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
-    .g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-    .card{background:var(--card);border:1px solid var(--bord);border-radius:12px;padding:1.3rem 1.4rem;transition:border-color .2s,transform .2s}
-    .card:hover{border-color:var(--a1);transform:translateY(-2px)}
-    .ch{display:flex;align-items:flex-start;gap:.7rem;margin-bottom:.75rem}
-    .ci{font-size:1.4rem;flex-shrink:0;margin-top:.1rem}
-    .card h3{font-size:.95rem;font-weight:700}
-    .card p{font-size:.85rem;color:var(--muted);margin-bottom:.45rem}
-    .card p:last-child{margin-bottom:0}
-    .card strong{color:var(--text)}
-    .hl{border-radius:10px;padding:1rem 1.25rem;margin:1.1rem 0;font-size:.86rem;color:var(--text)}
-    .hl-p{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.2)}
-    .hl-p strong{color:var(--a1)}
-    .hl-b{background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.2)}
-    .hl-b strong{color:var(--a3)}
-    .hl-g{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2)}
-    .hl-g strong{color:var(--a4)}
-    .hl-r{background:rgba(251,113,133,.07);border:1px solid rgba(251,113,133,.2)}
-    .hl-r strong{color:var(--a6)}
-    .hl-a{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2)}
-    .hl-a strong{color:var(--a5)}
-    .quote{background:linear-gradient(135deg,rgba(192,132,252,.07),rgba(96,165,250,.04));border:1px solid rgba(192,132,252,.18);border-radius:12px;padding:1.3rem 1.5rem;margin:1.3rem 0;font-style:italic;color:var(--text);position:relative}
-    .quote::before{content:'"';position:absolute;top:-.4rem;left:1rem;font-size:3.5rem;color:var(--a1);opacity:.25;font-style:normal;line-height:1}
-    .tw{overflow-x:auto;margin:1rem 0}
-    table{width:100%;border-collapse:collapse;font-size:.82rem}
-    thead th{background:rgba(192,132,252,.1);color:var(--a1);font-weight:700;text-align:left;padding:.6rem .9rem}
-    tbody td{padding:.55rem .9rem;border-top:1px solid var(--bord);color:var(--muted)}
-    tbody tr:hover td{background:rgba(255,255,255,.02)}
-    .tl{position:relative;padding-left:2rem}
-    .tl::before{content:'';position:absolute;left:.65rem;top:.4rem;width:2px;height:calc(100% - .8rem);background:linear-gradient(to bottom,var(--a1),var(--a3));border-radius:2px}
-    .ti{position:relative;margin-bottom:1.3rem}
-    .td-dot{position:absolute;left:-1.45rem;top:.35rem;width:.8rem;height:.8rem;border-radius:50%;background:var(--a1);border:2px solid var(--bg)}
-    .ti:nth-child(2) .td-dot{background:var(--a2)}
-    .ti:nth-child(3) .td-dot{background:var(--a3)}
-    .ti:nth-child(4) .td-dot{background:var(--a4)}
-    .ti:nth-child(5) .td-dot{background:var(--a5)}
-    .ti:nth-child(6) .td-dot{background:var(--a6)}
-    .ti h4{font-size:.9rem;font-weight:700}
-    .ti p{font-size:.82rem;color:var(--muted);margin-top:.2rem}
-    .formula{background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.2);border-radius:8px;padding:.6rem 1rem;font-family:'Courier New',monospace;font-size:.88rem;color:var(--a2);margin:.5rem 0;text-align:center;overflow-x:auto}
-    .sub{font-size:1.02rem;font-weight:700;margin:1.9rem 0 .9rem;color:var(--text)}
-    .btp{border-top:3px solid var(--a1)!important}
-    .btv{border-top:3px solid var(--a2)!important}
-    .btb{border-top:3px solid var(--a3)!important}
-    .btg{border-top:3px solid var(--a4)!important}
-    .bta{border-top:3px solid var(--a5)!important}
-    .btr{border-top:3px solid var(--a6)!important}
-    .hier{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin:1.2rem 0}
-    .hlv{border-radius:8px;text-align:center;padding:.7rem 1rem;font-size:.83rem;font-weight:700;width:100%}
-    .cm{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;max-width:400px;margin:.8rem auto}
-    .cm-c{border-radius:8px;padding:.9rem;text-align:center;font-size:.82rem}
-    #top{position:fixed;bottom:2rem;right:1.5rem;background:var(--a1);color:#0d1117;border:none;border-radius:999px;width:2.7rem;height:2.7rem;font-size:1.15rem;cursor:pointer;box-shadow:0 4px 18px rgba(192,132,252,.35);display:none;place-items:center;transition:transform .2s}
-    #top:hover{transform:scale(1.1)}
-    #top.show{display:grid}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Resumo — Gestão de Dados</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1117;--card:#1c2333;--bord:#30363d;
+  --a1:#22d3ee;--a2:#38bdf8;--a3:#6ee7b7;--a4:#fbbf24;--a5:#f87171;--a6:#a78bfa;
+  --text:#e6edf3;--muted:#8b949e;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+header{background:linear-gradient(135deg,#161b22,#0d1117);border-bottom:1px solid var(--bord);padding:3rem 2rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(34,211,238,.13) 0%,transparent 65%);pointer-events:none}
+.badge{display:inline-block;background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);color:var(--a1);font-size:.73rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .9rem;border-radius:999px;margin-bottom:1.1rem}
+header h1{font-size:clamp(1.6rem,4vw,2.5rem);font-weight:800;background:linear-gradient(135deg,#e6edf3 30%,var(--a1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.45rem}
+header p{color:var(--muted);font-size:.95rem;max-width:640px;margin:0 auto}
+.mpills{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;margin-top:1.4rem}
+.mpill{background:var(--card);border:1px solid var(--bord);border-radius:999px;padding:.28rem .85rem;font-size:.78rem;color:var(--muted)}
+.mpill span{color:var(--text);font-weight:600}
+.tabs{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--bord);display:flex;overflow-x:auto;scrollbar-width:none;padding:0 1rem}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--muted);font-size:.83rem;font-weight:600;padding:.9rem 1.2rem;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--a1);border-bottom-color:var(--a1)}
+main{max-width:1000px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+.sec{display:none;animation:fi .3s ease}
+.sec.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sh{display:flex;align-items:center;gap:.85rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--bord)}
+.si{width:2.6rem;height:2.6rem;border-radius:12px;display:grid;place-items:center;font-size:1.25rem;flex-shrink:0}
+.sh h2{font-size:1.4rem;font-weight:800}
+.sh p{font-size:.84rem;color:var(--muted);margin-top:.15rem}
+.grid{display:grid;gap:1rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--card);border:1px solid var(--bord);border-radius:12px;padding:1.3rem 1.4rem;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--a1);transform:translateY(-2px)}
+.ch{display:flex;align-items:flex-start;gap:.7rem;margin-bottom:.65rem}
+.ci{font-size:1.35rem;flex-shrink:0;margin-top:.1rem}
+.card h3{font-size:.93rem;font-weight:700}
+.card p,.card li{font-size:.84rem;color:var(--muted);margin-bottom:.3rem}
+.card ul{padding-left:1.2rem}
+.card strong{color:var(--text)}
+.hl{border-radius:10px;padding:1rem 1.25rem;margin:1rem 0;font-size:.85rem;color:var(--text)}
+.hl-c{background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2)}
+.hl-c strong{color:var(--a1)}
+.hl-g{background:rgba(110,231,183,.07);border:1px solid rgba(110,231,183,.2)}
+.hl-g strong{color:var(--a3)}
+.hl-y{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2)}
+.hl-y strong{color:var(--a4)}
+.hl-r{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.2)}
+.hl-r strong{color:var(--a5)}
+.hl-v{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2)}
+.hl-v strong{color:var(--a6)}
+.quote{background:linear-gradient(135deg,rgba(34,211,238,.07),rgba(56,189,248,.04));border:1px solid rgba(34,211,238,.18);border-radius:12px;padding:1.2rem 1.5rem;margin:1.2rem 0;font-style:italic;color:var(--text);position:relative}
+.quote::before{content:'"';position:absolute;top:-.4rem;left:1rem;font-size:3.5rem;color:var(--a1);opacity:.2;font-style:normal;line-height:1}
+.tw{overflow-x:auto;margin:1rem 0}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead th{background:rgba(34,211,238,.1);color:var(--a1);font-weight:700;text-align:left;padding:.6rem .9rem}
+tbody td{padding:.5rem .9rem;border-top:1px solid var(--bord);color:var(--muted)}
+tbody tr:hover td{background:rgba(255,255,255,.02)}
+.tl{position:relative;padding-left:2rem}
+.tl::before{content:'';position:absolute;left:.65rem;top:.4rem;width:2px;height:calc(100% - .8rem);background:linear-gradient(to bottom,var(--a1),var(--a3));border-radius:2px}
+.ti{position:relative;margin-bottom:1.2rem}
+.dot{position:absolute;left:-1.45rem;top:.35rem;width:.8rem;height:.8rem;border-radius:50%;background:var(--a1);border:2px solid var(--bg)}
+.ti:nth-child(2) .dot{background:var(--a2)}
+.ti:nth-child(3) .dot{background:var(--a3)}
+.ti:nth-child(4) .dot{background:var(--a4)}
+.ti:nth-child(5) .dot{background:var(--a5)}
+.ti:nth-child(6) .dot{background:var(--a6)}
+.ti:nth-child(7) .dot{background:var(--a1)}
+.ti h4{font-size:.9rem;font-weight:700}
+.ti p{font-size:.82rem;color:var(--muted);margin-top:.2rem}
+.sub{font-size:1rem;font-weight:700;margin:1.8rem 0 .8rem;color:var(--text)}
+.bta{border-top:3px solid var(--a1)!important}
+.btb{border-top:3px solid var(--a2)!important}
+.btg{border-top:3px solid var(--a3)!important}
+.bty{border-top:3px solid var(--a4)!important}
+.btr{border-top:3px solid var(--a5)!important}
+.btv{border-top:3px solid var(--a6)!important}
+.ex{background:rgba(34,211,238,.05);border-left:3px solid var(--a1);border-radius:0 8px 8px 0;padding:.7rem 1rem;margin-top:.6rem;font-size:.82rem;color:var(--muted)}
+.ex strong{color:var(--a1);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.3rem}
+.num{display:inline-flex;align-items:center;justify-content:center;width:1.6rem;height:1.6rem;border-radius:50%;font-size:.72rem;font-weight:800;margin-right:.45rem;flex-shrink:0}
+#top{position:fixed;bottom:2rem;right:1.5rem;background:var(--a1);color:#0d1117;border:none;border-radius:999px;width:2.7rem;height:2.7rem;font-size:1.15rem;cursor:pointer;box-shadow:0 4px 18px rgba(34,211,238,.3);display:none;place-items:center;transition:transform .2s}
+#top:hover{transform:scale(1.1)}
+#top.show{display:grid}
+</style>
 </head>
 <body>
 <header>
-  <div class="badge">🤖 Material de Estudo · Inteligência Artificial</div>
-  <h1>Inteligência Artificial &amp; Machine Learning</h1>
-  <p>Resumo completo de 7 apostilas — fundamentos, probabilidade, modelos supervisionados/não supervisionados e Orange Data Mining</p>
+  <div class="badge">🗄️ Material de Estudo · Gestão de Dados</div>
+  <h1>Gestão de Dados</h1>
+  <p>Resumo completo de 4 aulas — Visão Geral, Ética em Dados, Governança e Arquitetura de Dados Empresarial · Prof. Jefté Goes</p>
   <div class="mpills">
-    <div class="mpill">📚 <span>7 Apostilas · 72 páginas</span></div>
-    <div class="mpill">🧠 <span>ML · Estatística · Probabilidade</span></div>
-    <div class="mpill">🍊 <span>Orange Data Mining</span></div>
-    <div class="mpill">🎯 <span>Revisão AV1 incluída</span></div>
+    <div class="mpill">📚 <span>4 Aulas · 75 slides</span></div>
+    <div class="mpill">🏛️ <span>DAMA-DMBOK · Governança</span></div>
+    <div class="mpill">🏗️ <span>Arquitetura · Data Lakehouse</span></div>
+    <div class="mpill">⚖️ <span>Ética · LGPD · GDPR</span></div>
   </div>
 </header>
 
 <nav class="tabs">
-  <button class="tab active" onclick="show('a1',this)">🧠 Fundamentos de IA</button>
-  <button class="tab" onclick="show('a2',this)">🎓 Tipos de Aprendizagem</button>
-  <button class="tab" onclick="show('a3',this)">📐 Estatística &amp; Dados</button>
-  <button class="tab" onclick="show('a4',this)">🎲 Probabilidade &amp; Bayes</button>
-  <button class="tab" onclick="show('a5',this)">🌳 Modelos ML</button>
-  <button class="tab" onclick="show('a6',this)">🍊 Orange Data Mining</button>
-  <button class="tab" onclick="show('a7',this)">📋 Revisão &amp; Projetos</button>
+  <button class="tab active" onclick="show('a1',this)">📖 Aula 1 — Visão Geral</button>
+  <button class="tab" onclick="show('a2',this)">⚖️ Aula 2 — Ética em Dados</button>
+  <button class="tab" onclick="show('a3',this)">🏛️ Aula 3 — Governança</button>
+  <button class="tab" onclick="show('a4',this)">🏗️ Aula 4 — Arquitetura</button>
 </nav>
 
 <main>
 
-<!-- ABA 1 -->
+<!-- ABA 1: VISÃO GERAL -->
 <section id="a1" class="sec active">
-  <div class="sh"><div class="si" style="background:rgba(192,132,252,.1);color:var(--a1)">🧠</div><div><h2>Fundamentos de Inteligência Artificial</h2><p>Definição · Abordagens · História · Hierarquia IA › ML › DL · Limitações</p></div></div>
-  <div class="quote">Uma solução de IA confiável começa por uma pergunta clara, passa por dados compreendidos e preparados, representa incerteza, avalia erros com métricas adequadas e permanece limitada ao contexto em que foi validada.</div>
-  <div class="hl hl-p">A IA é o campo da Computação dedicado a sistemas que <strong>percebem, reconhecem padrões, raciocinam, planejam, aprendem e tomam decisões</strong> — não é uma técnica única, mas um conjunto diversificado de abordagens.</div>
+  <div class="sh"><div class="si" style="background:rgba(34,211,238,.1);color:var(--a1)">📖</div><div><h2>Introdução à Gestão de Dados</h2><p>Definição · Conceitos Essenciais · 11 Princípios · Framework DAMA-DMBOK</p></div></div>
 
-  <div class="sub">🗺️ Principais Abordagens</div>
-  <div class="grid g2">
-    <div class="card btp"><div class="ch"><span class="ci">📋</span><div><h3>Regras Explícitas</h3></div></div><p>O programador codifica todas as condições lógicas (if-then-else).</p><p><strong>Ex:</strong> Aprovação de crédito por critérios fixos de renda e idade.</p></div>
-    <div class="card btv"><div class="ch"><span class="ci">🗺️</span><div><h3>Busca e Planejamento</h3></div></div><p>Modela estados e compara caminhos para atingir um objetivo.</p><p><strong>Ex:</strong> GPS calculando a rota ótima.</p></div>
-    <div class="card btb"><div class="ch"><span class="ci">📊</span><div><h3>Aprendizado por Dados (ML)</h3></div></div><p>Algoritmos extraem padrões de dados históricos sem regras pré-programadas.</p><p><strong>Ex:</strong> Filtro antispam.</p></div>
-    <div class="card btg"><div class="ch"><span class="ci">🎮</span><div><h3>Aprendizado por Interação (RL)</h3></div></div><p>Agente aprende via recompensas e penalidades no ambiente.</p><p><strong>Ex:</strong> AlphaGo, carros autônomos.</p></div>
-  </div>
+  <div class="quote">Gerenciamento de Dados é o desenvolvimento, a execução e a supervisão de planos, políticas, programas e práticas que entregam, controlam, protegem e aumentam o valor dos ativos de dados e informações ao longo de todo o seu ciclo de vida. — DAMA International, DMBoK 2ª ed.</div>
 
-  <div class="sub">📅 Marcos Históricos</div>
-  <div class="card">
-    <div class="tl">
-      <div class="ti"><div class="td-dot"></div><h4>1950 — Alan Turing</h4><p>Teste de Turing como critério para avaliar comportamento inteligente em máquinas.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>1956 — Conferência de Dartmouth</h4><p>Nascimento oficial da IA. O termo é cunhado por John McCarthy, Minsky, Shannon.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>Anos 1980 — Sistemas Especialistas</h4><p>Regras explícitas codificadas por especialistas. Transparentes, mas frágeis e sem generalização.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>1997–2012 — Revolução dos Dados</h4><p>Deep Blue vence Kasparov. Internet expande dados. AlexNet comprova o poder de redes neurais + GPU.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>2016+ — IA Moderna e Generativa</h4><p>AlphaGo, arquitetura Transformers, LLMs. IA Generativa sintetiza textos, imagens e código.</p></div>
-    </div>
-  </div>
-
-  <div class="sub">🏗️ Hierarquia: IA › ML › DL › IA Generativa</div>
-  <div class="card">
-    <div class="hier">
-      <div class="hlv" style="background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.25);color:var(--a1)">🤖 Inteligência Artificial — universo mais amplo</div>
-      <div class="hlv" style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);color:var(--a2);width:88%">📊 Machine Learning — comportamento aprendido de dados</div>
-      <div class="hlv" style="background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);color:var(--a3);width:76%">🧬 Deep Learning — redes neurais com múltiplas camadas</div>
-      <div class="hlv" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);color:var(--a4);width:63%">✨ IA Generativa — síntese de texto, imagem e código</div>
-    </div>
-    <div class="hl hl-p" style="margin-top:.8rem"><strong>Frase-chave:</strong> "Nem toda IA aprende (sistemas especialistas não aprendem sozinhos) e nem todo modelo é inteligente fora da tarefa estrita para a qual foi construído."</div>
-  </div>
-
-  <div class="sub">⚠️ Limitações Importantes</div>
-  <div class="grid g2">
-    <div class="card btr"><div class="ch"><span class="ci">🚫</span><div><h3>Sem Consciência nem Intenção</h3></div></div><p>Modelos atuais não têm consciência, sentimentos ou compreensão semântica real.</p></div>
-    <div class="card btr"><div class="ch"><span class="ci">⚖️</span><div><h3>Reprodução de Vieses</h3></div></div><p>Modelos reproduzem e amplificam preconceitos contidos nas bases de treinamento.</p></div>
-    <div class="card btr"><div class="ch"><span class="ci">🌀</span><div><h3>Alucinações</h3></div></div><p>Fora da distribuição de treino: respostas sintaticamente corretas, mas factualmente erradas.</p></div>
-    <div class="card btr"><div class="ch"><span class="ci">🔍</span><div><h3>Auditoria Obrigatória</h3></div></div><p>Sempre questionar: qual tarefa? quais dados? como medir? quais riscos éticos e legais?</p></div>
-  </div>
-</section>
-
-<!-- ABA 2 -->
-<section id="a2" class="sec">
-  <div class="sh"><div class="si" style="background:rgba(167,139,250,.1);color:var(--a2)">🎓</div><div><h2>Tipos de Aprendizagem de Máquina</h2><p>Supervisionado · Não Supervisionado · Por Reforço · Questões resolvidas</p></div></div>
-  <div class="hl hl-b"><strong>Pipeline fundamental:</strong> Dados → Algoritmo → Modelo → Predição · <strong>Regra de ouro:</strong> Quanto mais dados representativos, melhor o modelo aprende.</div>
-
-  <div class="tw">
-    <table>
-      <thead><tr><th>Paradigma</th><th>Rótulos?</th><th>Objetivo Central</th><th>Exemplo</th></tr></thead>
-      <tbody>
-        <tr><td><strong style="color:var(--a1)">Supervisionado</strong></td><td>✅ Sim</td><td>Prever resposta para novas entradas</td><td>Detecção de fraudes</td></tr>
-        <tr><td><strong style="color:var(--a3)">Não Supervisionado</strong></td><td>❌ Não</td><td>Descobrir padrões e agrupamentos ocultos</td><td>Segmentação de clientes</td></tr>
-        <tr><td><strong style="color:var(--a4)">Por Reforço</strong></td><td>🔄 Recompensa/punição</td><td>Aprender política de decisão ótima</td><td>Agente jogando xadrez</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="sub">🎯 Supervisionado: Classificação vs. Regressão</div>
-  <div class="grid g2">
-    <div class="card btp">
-      <h3 style="color:var(--a1);margin-bottom:.6rem">📂 Classificação</h3>
-      <p><strong>Alvo:</strong> Categórico / Discreto</p><p><em>Dica: "cabe em um dropdown"</em></p>
-      <p style="margin-top:.5rem"><strong>Exemplos:</strong> Spam vs. Não Spam · Fraude vs. Legítimo · Diagnóstico médico · Churn (Sim/Não)</p>
+  <div class="sub">🔑 Conceitos Essenciais</div>
+  <div class="grid g3">
+    <div class="card bta">
+      <div class="ch"><span class="ci">📦</span><div><h3>Dados</h3></div></div>
+      <p>Fatos e números <strong>brutos</strong> que podem ser processados para gerar informações significativas.</p>
     </div>
     <div class="card btb">
-      <h3 style="color:var(--a3);margin-bottom:.6rem">🔢 Regressão</h3>
-      <p><strong>Alvo:</strong> Numérico Contínuo (valor real)</p><p><em>Dica: "precisa de calculadora"</em></p>
-      <p style="margin-top:.5rem"><strong>Exemplos:</strong> Preço de imóvel (R$) · Temperatura (°C) · Demanda futura · Projeção de faturamento</p>
+      <div class="ch"><span class="ci">💡</span><div><h3>Informação</h3></div></div>
+      <p>Resultado do processamento dos dados, agregando <strong>contexto, significado e valor</strong> para melhor tomada de decisão.</p>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">💎</span><div><h3>Dados como Ativo</h3></div></div>
+      <p>As organizações reconhecem os dados como um <strong>ativo estratégico</strong> capaz de impulsionar crescimento e vantagem competitiva.</p>
+    </div>
+  </div>
+  <div class="hl hl-c"><strong>O gerenciamento adequado de dados maximiza:</strong> Valor para o negócio · Qualidade na tomada de decisões · Eficiência operacional</div>
+
+  <div class="sub">📜 11 Princípios do Gerenciamento de Dados</div>
+  <div class="grid g2">
+    <div class="card">
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">1</span><strong>Dados como Ativo</strong> — tratar dados como ativo valioso para o negócio.</p>
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">2</span><strong>Valor Econômico dos Dados</strong> — gerenciamento adequado gera benefícios financeiros e operacionais.</p>
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">3</span><strong>Gestão da Qualidade</strong> — dados devem ser Precisos, Consistentes, Confiáveis e Oportunos.</p>
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">4</span><strong>Papel dos Metadados</strong> — fornecem contexto, tornando dados mais fáceis de compreender e utilizar.</p>
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">5</span><strong>Planejamento</strong> — gerenciamento bem-sucedido requer planejamento estratégico.</p>
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">6</span><strong>Colaboração Interfuncional</strong> — exige cooperação entre diferentes departamentos.</p>
+    </div>
+    <div class="card">
+      <p><span class="num" style="background:rgba(110,231,183,.15);color:var(--a3)">7</span><strong>Perspectiva Corporativa</strong> — conduzido em toda a organização, não de forma isolada.</p>
+      <p><span class="num" style="background:rgba(110,231,183,.15);color:var(--a3)">8</span><strong>Gerenciamento do Ciclo de Vida</strong> — dados gerenciados durante todo o seu ciclo de vida.</p>
+      <p><span class="num" style="background:rgba(110,231,183,.15);color:var(--a3)">9</span><strong>Gerenciamento de Riscos</strong> — identificar e mitigar os riscos relacionados aos dados.</p>
+      <p><span class="num" style="background:rgba(110,231,183,.15);color:var(--a3)">10</span><strong>Alinhamento com TI</strong> — iniciativas de TI alinhadas aos objetivos do negócio.</p>
+      <p><span class="num" style="background:rgba(110,231,183,.15);color:var(--a3)">11</span><strong>Comprometimento da Liderança</strong> — liderança forte é essencial para o sucesso.</p>
     </div>
   </div>
 
-  <div class="sub">🔍 Não Supervisionado — Clustering</div>
+  <div class="sub">🎡 Framework DAMA-DMBOK</div>
   <div class="grid g2">
-    <div class="card"><div class="ch"><span class="ci">🔵</span><div><h3>Como funciona</h3></div></div><p>Calcula distância/similaridade entre instâncias. Registros próximos vão para o mesmo cluster. <strong>Algoritmo principal: K-Means.</strong></p></div>
-    <div class="card"><div class="ch"><span class="ci">🛍️</span><div><h3>Quando usar</h3></div></div><p>Segmentação sem categorias pré-definidas, detecção de anomalias, agrupamento de produtos, análise de comportamento.</p></div>
+    <div class="card bta">
+      <div class="ch"><span class="ci">🎡</span><div><h3>A Roda DAMA (DAMA Wheel)</h3></div></div>
+      <p>Visão geral das principais <strong>áreas de conhecimento</strong> do gerenciamento de dados.</p>
+      <p>Fornece um modelo de referência para organizar e compreender todas as disciplinas.</p>
+      <p><strong>Centro:</strong> Governança de Dados — coordena e orienta todas as demais áreas.</p>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">⬡</span><div><h3>Hexágono dos Fatores Ambientais</h3></div></div>
+      <p>O sucesso do gerenciamento de dados depende do equilíbrio entre três pilares:</p>
+      <ul style="list-style:none;padding:0;margin-top:.4rem">
+        <li style="font-size:.84rem;color:var(--muted)">👥 <strong style="color:var(--text)">Pessoas (People)</strong></li>
+        <li style="font-size:.84rem;color:var(--muted)">⚙️ <strong style="color:var(--text)">Processos (Processes)</strong></li>
+        <li style="font-size:.84rem;color:var(--muted)">💻 <strong style="color:var(--text)">Tecnologia (Technology)</strong></li>
+      </ul>
+      <p style="margin-top:.4rem">No centro: <strong>Objetivos</strong> e <strong>Princípios</strong> da organização.</p>
+    </div>
   </div>
+  <div class="hl hl-g"><strong>Ideia principal:</strong> O gerenciamento de dados eficaz é resultado do alinhamento entre Pessoas, Processos e Tecnologia, sempre guiados pelos Objetivos e Princípios da organização.</div>
+</section>
 
-  <div class="sub">🎮 Por Reforço — Ciclo Agente-Ambiente</div>
-  <div class="card">
-    <div class="grid g2">
-      <div><p><strong style="color:var(--a1)">S — Estado:</strong> representação da situação atual observada pelo agente.</p></div>
-      <div><p><strong style="color:var(--a2)">A — Ação:</strong> decisão escolhida pelo agente para executar no ambiente.</p></div>
-      <div><p><strong style="color:var(--a3)">E — Ambiente:</strong> responde à ação e transita para um novo estado.</p></div>
-      <div><p><strong style="color:var(--a4)">R — Recompensa:</strong> sinal de feedback positivo (ganho) ou negativo (punição).</p></div>
+<!-- ABA 2: ÉTICA EM DADOS -->
+<section id="a2" class="sec">
+  <div class="sh"><div class="si" style="background:rgba(110,231,183,.1);color:var(--a3)">⚖️</div><div><h2>Ética em Dados</h2><p>Princípios éticos · Leis de privacidade · Direitos digitais · Riscos · Cultura ética</p></div></div>
+
+  <div class="hl hl-c"><strong>Definição:</strong> Ética em Dados é um conjunto de princípios morais que orientam como coletamos, utilizamos e gerenciamos os dados, garantindo que as práticas respeitem os direitos das pessoas e promovam a justiça.</div>
+
+  <div class="sub">🧭 Princípios Éticos Fundamentais</div>
+  <div class="grid g3">
+    <div class="card bta">
+      <div class="ch"><span class="ci">🤝</span><div><h3>Respeito aos Indivíduos</h3></div></div>
+      <p><strong>Privacidade e Autonomia:</strong> Obter consentimento antes de coletar dados pessoais. Permitir que os indivíduos controlem como seus dados são utilizados.</p>
+      <p><strong>Dignidade:</strong> Tratar pessoas como seres humanos, não apenas como dados.</p>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">🔍</span><div><h3>Transparência</h3></div></div>
+      <p>Comunicar claramente as práticas de dados. Informar:</p>
+      <ul><li>Quais dados são coletados e por quê</li><li>Como serão utilizados</li><li>Quem terá acesso</li><li>Por quanto tempo armazenados</li><li>Como serão descartados</li></ul>
+    </div>
+    <div class="card bty">
+      <div class="ch"><span class="ci">✅</span><div><h3>Responsabilização</h3></div></div>
+      <p>As organizações são responsáveis por garantir práticas éticas e legais:</p>
+      <ul><li>Cumprir leis e regulamentações</li><li>Assumir responsabilidade por vazamentos</li><li>Tratar rapidamente questões éticas</li></ul>
     </div>
   </div>
 
-  <div class="sub">✅ Questões Resolvidas</div>
+  <div class="sub">⚖️ Leis de Privacidade de Dados</div>
   <div class="grid g2">
-    <div class="card"><p style="color:var(--a3);font-weight:700">Prever preço de carro usado</p><p><strong>Supervisionado — Regressão</strong>: saída numérica contínua.</p></div>
-    <div class="card"><p style="color:var(--a3);font-weight:700">Detectar spam</p><p><strong>Supervisionado — Classificação Binária</strong>: rótulo spam/não-spam.</p></div>
-    <div class="card"><p style="color:var(--a3);font-weight:700">Separar clientes em perfis sem rótulos</p><p><strong>Não Supervisionado — Clustering</strong>: descoberta de agrupamentos.</p></div>
-    <div class="card"><p style="color:var(--a3);font-weight:700">Robô desviando de obstáculos</p><p><strong>Aprendizado por Reforço</strong>: ciclo ação/ambiente/recompensa-punição.</p></div>
-    <div class="card"><p style="color:var(--a3);font-weight:700">Prever churn de cliente</p><p><strong>Supervisionado — Classificação Binária</strong>: histórico com rótulo Cancelou: Sim/Não.</p></div>
-    <div class="card"><p style="color:var(--a3);font-weight:700">Descobrir hábitos em supermercado</p><p><strong>Não Supervisionado</strong>: padrões em dados sem rótulos.</p></div>
+    <div class="card">
+      <h3 style="color:var(--a1);margin-bottom:.5rem">Legislações Principais</h3>
+      <p>🇧🇷 <strong>LGPD</strong> — Lei Geral de Proteção de Dados (Brasil)</p>
+      <p>🇪🇺 <strong>GDPR</strong> — General Data Protection Regulation (União Europeia)</p>
+      <p>🇺🇸 <strong>CCPA</strong> — California Consumer Privacy Act</p>
+      <p>🇺🇸 <strong>New York SHIELD Act</strong></p>
+      <p>🇺🇸 <strong>Colorado Privacy Act</strong></p>
+      <p>🇺🇸 <strong>E-Government Act</strong></p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--a3);margin-bottom:.5rem">Princípios das Leis</h3>
+      <p>📋 <strong>Consentimento Informado:</strong> Indivíduos devem receber informações claras sobre coleta, uso, riscos e benefícios.</p>
+      <p>🎯 <strong>Limitação da Finalidade:</strong> Dados coletados apenas para finalidade específica e legítima. Informar prazo de retenção.</p>
+      <p>📉 <strong>Minimização de Dados:</strong> Coletar apenas os dados necessários para a finalidade pretendida.</p>
+    </div>
+  </div>
+
+  <div class="sub">🌐 Direitos Digitais Online</div>
+  <div class="grid g3">
+    <div class="card bta">
+      <div class="ch"><span class="ci">🔓</span><div><h3>Direito de Acesso</h3></div></div>
+      <p>Acessar dados que a organização possui. Saber quais foram coletados, como são usados e por quê.</p>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">🗑️</span><div><h3>Direito ao Esquecimento</h3></div></div>
+      <p>Solicitar exclusão de dados pessoais. Evitar manter dados além do necessário. Seguir políticas de retenção.</p>
+    </div>
+    <div class="card bty">
+      <div class="ch"><span class="ci">🏠</span><div><h3>Propriedade dos Dados</h3></div></div>
+      <p>Indivíduos continuam proprietários de seus dados pessoais. Compartilhar não transfere propriedade.</p>
+    </div>
+  </div>
+
+  <div class="sub">🚨 Riscos do Tratamento Antiético</div>
+  <div class="grid g2">
+    <div class="card btr">
+      <div class="ch"><span class="ci">💥</span><div><h3>Vazamentos de Dados (Data Breaches)</h3></div></div>
+      <p>Acesso não autorizado a informações sensíveis.</p>
+      <p><strong>Impactos:</strong> Exposição de dados pessoais · Roubo de identidade · Perda da confiança.</p>
+      <p><strong>Prevenção:</strong> Segurança robusta · Controle de acesso · Treinamento.</p>
+    </div>
+    <div class="card bty">
+      <div class="ch"><span class="ci">⚖️</span><div><h3>Discriminação e Viés Algorítmico</h3></div></div>
+      <p>Dados ou algoritmos enviesados resultam em tratamento injusto.</p>
+      <p><strong>Exemplos:</strong> Recrutamento enviesado · Aprovação injusta de empréstimos · Recomendações discriminatórias.</p>
+      <p><strong>Impactos:</strong> Desigualdade · Problemas éticos e legais.</p>
+    </div>
+    <div class="card btr">
+      <div class="ch"><span class="ci">💸</span><div><h3>Consequências Financeiras e Legais</h3></div></div>
+      <p>Multas regulatórias · Processos judiciais · Violações de conformidade · Perdas financeiras.</p>
+    </div>
+    <div class="card btr">
+      <div class="ch"><span class="ci">📉</span><div><h3>Perda de Confiança</h3></div></div>
+      <p>Danos à reputação · Perda de clientes · Redução de oportunidades de negócio · Menor fidelização.</p>
+    </div>
+    <div class="card bty">
+      <div class="ch"><span class="ci">🎯</span><div><h3>Marketing Manipulativo</h3></div></div>
+      <p>Uso de dados para explorar vulnerabilidades: publicidade baseada no medo, anúncios enganosos, exploração de inseguranças.</p>
+      <p><strong>Marketing Ético:</strong> Ser transparente · Respeitar privacidade · Usar dados responsavelmente.</p>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">🗣️</span><div><h3>Liberdade de Expressão Online</h3></div></div>
+      <p>Direito de expressar opiniões online. Mas não justifica: assédio, bullying, discurso de ódio, ameaças ou conteúdo terrorista.</p>
+    </div>
+  </div>
+
+  <div class="sub">🌱 Estabelecendo uma Cultura Ética de Dados</div>
+  <div class="grid g2">
+    <div class="card bta">
+      <div class="ch"><span class="ci">👔</span><div><h3>Comprometimento da Liderança</h3></div></div>
+      <p>Líderes devem: liderar pelo exemplo, comunicar a importância da ética, estabelecer expectativas claras e promover comportamento ético em toda a organização.</p>
+      <p style="margin-top:.4rem"><strong>Alocação de Recursos:</strong> orçamento, equipe, tecnologia e ferramentas para suportar iniciativas de ética.</p>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">🎓</span><div><h3>Treinamento e Conscientização</h3></div></div>
+      <p><strong>Tópicos:</strong> Leis de privacidade · Práticas éticas · Políticas de proteção · Consequências de comportamentos antiéticos.</p>
+      <p style="margin-top:.4rem"><strong>Programas:</strong> Treinamentos obrigatórios anuais · Avaliações por questionários/certificações · Reforço contínuo.</p>
+    </div>
   </div>
 </section>
 
-<!-- ABA 3 -->
+<!-- ABA 3: GOVERNANÇA -->
 <section id="a3" class="sec">
-  <div class="sh"><div class="si" style="background:rgba(96,165,250,.1);color:var(--a3)">📐</div><div><h2>Estatística Descritiva e Preparação de Dados</h2><p>Tipos de variáveis · Medidas · Visualização · Limpeza · Transformações</p></div></div>
-  <div class="quote">Antes de ensinar uma máquina a aprender com os dados, precisamos entender os dados.</div>
+  <div class="sh"><div class="si" style="background:rgba(167,139,250,.1);color:var(--a6)">🏛️</div><div><h2>Governança de Dados</h2><p>Conceito · 7 razões · Relação com outras disciplinas · Exemplos práticos</p></div></div>
 
-  <div class="sub">🏷️ Tipos de Variáveis</div>
+  <div class="quote">Dados bem governados constroem um futuro mais seguro, inteligente e sustentável.</div>
+
+  <div class="hl hl-v"><strong>Definição:</strong> Governança de Dados é a maneira como as organizações garantem que seus dados sejam <strong>precisos, seguros e usados corretamente</strong>. Estabelece regras sobre como os dados são tratados, quem pode usá-los e como são protegidos.</div>
+
+  <div class="sub">❓ Perguntas que a Governança Responde</div>
   <div class="grid g2">
-    <div class="card btp"><h3 style="color:var(--a1);margin-bottom:.4rem">Nominal (Qualitativa)</h3><p>Categorias sem ordem ou hierarquia.</p><p><strong>Ex:</strong> Cidade, Cor, Departamento</p></div>
-    <div class="card btv"><h3 style="color:var(--a2);margin-bottom:.4rem">Ordinal (Qualitativa)</h3><p>Categorias com ordenação natural, distância indefinida.</p><p><strong>Ex:</strong> Avaliação (Baixo/Médio/Alto), Escolaridade</p></div>
-    <div class="card btb"><h3 style="color:var(--a3);margin-bottom:.4rem">Discreta (Quantitativa)</h3><p>Inteiros resultantes de contagens.</p><p><strong>Ex:</strong> Nº de filhos, quantidade de compras</p></div>
-    <div class="card btg"><h3 style="color:var(--a4);margin-bottom:.4rem">Contínua (Quantitativa)</h3><p>Valores reais em escala contínua.</p><p><strong>Ex:</strong> Salário (R$), Altura, Temperatura</p></div>
+    <div class="card"><p>🔒 Quem é o <strong>proprietário</strong> dos dados?</p></div>
+    <div class="card"><p>🛡️ Como os dados devem ser <strong>tratados e protegidos</strong>?</p></div>
+    <div class="card"><p>✨ Como a <strong>qualidade dos dados</strong> pode ser mantida?</p></div>
+    <div class="card"><p>📋 Quais <strong>regras</strong> devem ser seguidas ao usar dados?</p></div>
   </div>
 
-  <div class="sub">📏 Medidas de Tendência Central</div>
-  <div class="grid g3">
-    <div class="card"><div class="ch"><span class="ci">➗</span><div><h3>Média</h3></div></div><div class="formula">x̄ = Σxᵢ / n</div><p><strong>Sensível a outliers!</strong> Pode representar mal a maioria.</p></div>
-    <div class="card"><div class="ch"><span class="ci">🎯</span><div><h3>Mediana</h3></div></div><p>Valor central ordenado (P50). <strong>Robusta a outliers.</strong> Melhor para distribuições assimétricas.</p></div>
-    <div class="card"><div class="ch"><span class="ci">🏆</span><div><h3>Moda</h3></div></div><p>Valor mais frequente. Única medida aplicável a <strong>variáveis categóricas.</strong></p></div>
-  </div>
-  <div class="hl hl-a"><strong>Caso Prático — Impacto do Outlier:</strong> Salários [R$2.000, 2.200, 2.400, 2.500, 15.000] → <strong>Média: R$4.820</strong> (distorcida) vs. <strong>Mediana: R$2.400</strong> (representativa).</div>
-
-  <div class="sub">📉 Medidas de Dispersão</div>
-  <div class="grid g3">
-    <div class="card"><h3>Amplitude</h3><div class="formula">Máx − Mín</div><p>Simples, mas sensível a extremos.</p></div>
-    <div class="card"><h3>Variância</h3><div class="formula">s² = Σ(xᵢ−x̄)² / (n−1)</div><p>Penaliza desvios grandes. Unidade fica ao quadrado.</p></div>
-    <div class="card"><h3>Desvio Padrão</h3><div class="formula">s = √s²</div><p>Retorna à <strong>mesma unidade original</strong>. Mais interpretável.</p></div>
-  </div>
-  <div class="hl hl-b"><strong>Exemplo:</strong> Conjunto A [48,49,50,51,52] e B [20,35,50,65,80] têm <strong>mesma média (50)</strong>, mas DP ≈1,4 vs ≈22,4 — dispersões completamente diferentes!</div>
-
-  <div class="sub">📈 Visualizações e suas Perguntas</div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Gráfico</th><th>Pergunta que Responde</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Histograma</strong></td><td>Qual a forma da distribuição? Simétrica, assimétrica, bimodal?</td></tr>
-        <tr><td><strong>Boxplot</strong></td><td>Onde estão mediana e quartis? Há outliers? Como grupos se comparam?</td></tr>
-        <tr><td><strong>Scatter Plot</strong></td><td>Existe correlação entre duas variáveis numéricas? Há clusters?</td></tr>
-        <tr><td><strong>Barras</strong></td><td>Qual a frequência ou agregado entre categorias?</td></tr>
-      </tbody>
-    </table>
+  <div class="sub">7️⃣ Razões pelas quais precisamos de Governança de Dados</div>
+  <div class="grid g2">
+    <div class="card">
+      <p><span class="num" style="background:rgba(167,139,250,.15);color:var(--a6)">1</span>Proteja seus dados.</p>
+      <p><span class="num" style="background:rgba(167,139,250,.15);color:var(--a6)">2</span>Garanta conformidade com regulamentações e leis de privacidade.</p>
+      <p><span class="num" style="background:rgba(167,139,250,.15);color:var(--a6)">3</span>Melhore a qualidade dos dados.</p>
+      <p><span class="num" style="background:rgba(167,139,250,.15);color:var(--a6)">4</span>Evite silos de dados inconsistentes.</p>
+    </div>
+    <div class="card">
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">5</span>Aumente a confiança nos dados.</p>
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">6</span>Melhore a tomada de decisões.</p>
+      <p><span class="num" style="background:rgba(34,211,238,.15);color:var(--a1)">7</span>Melhore a eficiência.</p>
+    </div>
   </div>
 
-  <div class="sub">🧹 Problemas Comuns e Tratamento</div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Problema</th><th>Tratamento</th><th>Cuidado</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Valores ausentes</strong></td><td>Imputação: média (simétrico) / mediana (assimétrico) / moda (categórico)</td><td>Calcular parâmetros APENAS no treino</td></tr>
-        <tr><td><strong>Valores absurdos</strong></td><td>Corrigir com domínio do negócio</td><td>Outlier pode ser fraude! Não apagar sem investigar.</td></tr>
-        <tr><td><strong>Formatos inconsistentes</strong></td><td>Padronizar maiúsculas, espaços, abreviações</td><td>"salvador" ≠ "Salvador" para algoritmos</td></tr>
-        <tr><td><strong>Duplicatas</strong></td><td>Definir chave primária e deduplicar</td><td>Inflam classes e causam data leakage</td></tr>
-        <tr><td><strong>Escalas distintas</strong></td><td>Normalização ou Padronização</td><td>Essencial para KNN, SVM, K-Means</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="sub">🔗 Governança + Outras Disciplinas</div>
+  <div class="hl hl-c"><strong>Princípio central:</strong> Governança de Dados é a base que sustenta todas as outras disciplinas. Fornece políticas, propriedade e responsabilidade — o framework dentro do qual todo o trabalho com dados acontece.</div>
 
-  <div class="sub">🔄 Transformações Essenciais</div>
-  <div class="grid g3">
-    <div class="card btp"><h3 style="color:var(--a1);margin-bottom:.4rem">Min-Max (Normalização)</h3><div class="formula">x_norm = (x − x_min) / (x_max − x_min)</div><p>Mapeia para [0,1]. Ideal para KNN, K-Means e redes neurais.</p></div>
-    <div class="card btb"><h3 style="color:var(--a3);margin-bottom:.4rem">Z-score (Padronização)</h3><div class="formula">z = (x − μ) / σ</div><p>Média=0, DP=1. Mais robusta a outliers. Ideal para SVM, PCA, regressão.</p></div>
-    <div class="card btg"><h3 style="color:var(--a4);margin-bottom:.4rem">One-Hot Encoding</h3><p>Variável nominal → colunas binárias (0 ou 1).</p><p><strong>Ex:</strong> Salvador=[1,0,0], Ilhéus=[0,1,0]</p><p>Evita falsa ordenação matemática.</p></div>
+  <div class="grid g2">
+    <div class="card bta">
+      <div class="ch"><span class="ci">✨</span><div><h3>+ Qualidade de Dados → Dados Confiáveis</h3></div></div>
+      <p><em>"Governança define como é o 'bom'; Qualidade de Dados prova que isso foi alcançado."</em></p>
+      <p style="margin-top:.4rem"><strong>Ações:</strong> Define padrões e KPIs (precisão, completude, atualidade). Nomeia Data Stewards. Revisa scorecards de qualidade. Escala problemas para o Conselho.</p>
+      <div class="ex"><strong>🏢 Exemplo</strong>Empresa financeira exige 95% de completude nos endereços dos clientes. Ferramentas sinalizam ausentes → stewards corrigem → governança revisa mensalmente.</div>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">🔒</span><div><h3>+ Segurança e Privacidade → Dados Seguros</h3></div></div>
+      <p><strong>Ações:</strong> Define esquema de classificação (Público, Interno, Confidencial, Restrito). Atribui proprietários de dados. Coordena com InfoSec (GDPR, HIPAA, PCI DSS).</p>
+      <div class="ex"><strong>🏥 Exemplo</strong>Organização de saúde classifica dados de pacientes como "Confidencial". Segurança aplica criptografia e controles de acesso. Governança revisa relatórios de exceções.</div>
+    </div>
+    <div class="card bty">
+      <div class="ch"><span class="ci">🏗️</span><div><h3>+ Arquitetura de Dados → Dados Organizados</h3></div></div>
+      <p><strong>Ações:</strong> Define convenções de nomenclatura, estruturas de chaves e princípios de integração. Revisa novos modelos antes da implantação. Gerencia a Data Design Authority.</p>
+      <div class="ex"><strong>📦 Exemplo</strong>Antes de construir um data warehouse, governança revisa o modelo para garantir que "Cliente" e "Conta" não sejam duplicados em diferentes sistemas.</div>
+    </div>
+    <div class="card btr">
+      <div class="ch"><span class="ci">⚖️</span><div><h3>+ Ética de Dados → Dados Responsáveis</h3></div></div>
+      <p><strong>Ações:</strong> Define princípios de uso ético (justiça, transparência, responsabilidade). Revisa projetos quanto a riscos éticos e legais. Incorpora pontos de verificação éticos.</p>
+      <div class="ex"><strong>📊 Exemplo</strong>Antes de lançar analytics de marketing com dados comportamentais, governança garante que os dados foram coletados com consentimento.</div>
+    </div>
+    <div class="card btv">
+      <div class="ch"><span class="ci">🗂️</span><div><h3>+ MDM → Dados Consistentes</h3></div></div>
+      <p><strong>MDM = Master Data Management.</strong> Define domínios (Cliente, Produto, Fornecedor) e proprietários. Aprova regras de golden record. Resolve conflitos entre sistemas.</p>
+      <div class="ex"><strong>🛒 Exemplo</strong>Empresa varejista define "Cliente" como domínio mestre. Quando marketing e vendas têm registros conflitantes, governança decide qual versão é a autoridade.</div>
+    </div>
+    <div class="card bta">
+      <div class="ch"><span class="ci">📂</span><div><h3>+ Metadados → Dados Contextualizados</h3></div></div>
+      <p><strong>Ações:</strong> Todo dataset deve ter definição, proprietário e linhagem. Monitora cobertura no catálogo corporativo. Revisa metadados em auditorias.</p>
+      <div class="ex"><strong>🔍 Exemplo</strong>Governança audita o catálogo. Datasets sem descrições ou nomes de proprietários são sinalizados para correção antes de novos usuários acessá-los.</div>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">📈</span><div><h3>+ BI e Analytics → Insights Confiáveis</h3></div></div>
+      <p><strong>Ações:</strong> Estabelece fontes certificadas e definições de KPIs. Aprova dashboards e relatórios críticos. Acompanha uso de relatórios certificados vs. não certificados.</p>
+      <div class="ex"><strong>🌍 Exemplo</strong>Equipe global cria dashboard de "Desempenho de Vendas". Escritório de governança valida que usa tabelas certificadas e lógica de KPI aprovada antes de publicar.</div>
+    </div>
+    <div class="card bty">
+      <div class="ch"><span class="ci">🤖</span><div><h3>+ IA e Machine Learning → Inteligência Responsável</h3></div></div>
+      <p><strong>Ações:</strong> Define padrões de qualidade, consentimento e linhagem dos dados de treinamento. Garante testes de viés. Mantém registro de modelos com aprovações e revisões éticas.</p>
+      <div class="ex"><strong>💳 Exemplo</strong>Antes de implantar modelo de pontuação de crédito, governança revisa o dataset quanto à completude e potencial de viés. Documentação de linhagem fica no registro para auditoria.</div>
+    </div>
   </div>
-  <div class="hl hl-r"><strong>⚠️ Data Leakage:</strong> Parâmetros de normalização/imputação devem ser calculados APENAS nos dados de treino e aplicados no teste. Separar treino/teste ANTES de qualquer transformação.</div>
 </section>
 
-<!-- ABA 4 -->
+<!-- ABA 4: ARQUITETURA -->
 <section id="a4" class="sec">
-  <div class="sh"><div class="si" style="background:rgba(52,211,153,.1);color:var(--a4)">🎲</div><div><h2>Probabilidade e Raciocínio sob Incerteza</h2><p>Espaço amostral · Operações · Probabilidade Condicional · Teorema de Bayes</p></div></div>
-  <div class="quote">Como uma Inteligência Artificial toma uma decisão quando não tem certeza sobre o que está acontecendo?</div>
-  <div class="hl hl-b"><strong>Conceito-chave:</strong> Grande parte da IA trabalha com <strong>graus de confiança</strong>, não com certezas. A probabilidade é a linguagem matemática desses graus (intervalo de 0 a 1).</div>
+  <div class="sh"><div class="si" style="background:rgba(251,191,36,.1);color:var(--a4)">🏗️</div><div><h2>Arquitetura de Dados Empresarial</h2><p>Paradigmas · OLTP vs OLAP · Data Warehouse · Data Lake · Lakehouse · Mesh &amp; Fabric</p></div></div>
 
-  <div class="sub">⚖️ Determinístico vs. Probabilístico</div>
-  <div class="tw">
-    <table>
-      <thead><tr><th></th><th>Determinístico</th><th>Probabilístico</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Lógica</strong></td><td>Booleana: Verdadeiro / Falso</td><td>Grau de confiança: 0 a 1</td></tr>
-        <tr><td><strong>Resultado</strong></td><td>Sempre o mesmo para mesmas entradas</td><td>Diferentes resultados são possíveis</td></tr>
-        <tr><td><strong>Exemplo</strong></td><td>se idade &lt; 18 → menor_de_idade = true</td><td>P(Fraude) = 0,78 → 78% de chance</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="hl hl-y"><strong>Definição:</strong> A arquitetura de dados é um conjunto de regras, políticas, padrões e modelos que governam e definem o tipo de dados coletados e como são usados, armazenados, gerenciados e integrados nos sistemas e bancos de dados de uma organização.</div>
 
-  <div class="sub">📐 Operações com Probabilidade</div>
+  <div class="sub">🧩 Componentes da Arquitetura de Dados</div>
   <div class="grid g3">
-    <div class="card btp"><h3 style="color:var(--a1);margin-bottom:.4rem">Complemento</h3><div class="formula">P(¬A) = 1 − P(A)</div><p><strong>Ex:</strong> P(Fraude)=0,08 → P(Não Fraude)=0,92</p></div>
-    <div class="card btb"><h3 style="color:var(--a3);margin-bottom:.4rem">União</h3><div class="formula">P(A∪B) = P(A)+P(B)−P(A∩B)</div><p>Subtrai interseção para não contar duas vezes.</p></div>
-    <div class="card btg"><h3 style="color:var(--a4);margin-bottom:.4rem">Condicional</h3><div class="formula">P(A|B) = P(A∩B) / P(B)</div><p>P(A dado que B ocorreu). P(B) &gt; 0.</p></div>
-  </div>
-  <div class="hl hl-a"><strong>⚠️ Distinção Crucial — Mutuamente Exclusivos vs. Independentes:</strong><br>
-  • <strong>Mutuamente Exclusivos:</strong> Não ocorrem ao mesmo tempo → P(A∩B) = 0 (ex: dado mostrando 2 e 5 juntos)<br>
-  • <strong>Independentes:</strong> Ocorrência de um NÃO afeta o outro → P(A∩B) = P(A)×P(B) (ex: duas jogadas de moeda)</div>
-
-  <div class="sub">🔮 Teorema de Bayes</div>
-  <div class="card">
-    <div class="formula" style="font-size:1.1rem">P(H|E) = P(E|H) × P(H) / P(E)</div>
-    <div class="grid g2" style="margin-top:.8rem">
-      <div><p><strong style="color:var(--a1)">P(H) — Prior:</strong> Crença inicial antes da evidência (ex: P(Fraude)=10%)</p></div>
-      <div><p><strong style="color:var(--a3)">P(E|H) — Likelihood:</strong> P(evidência | hipótese verdadeira) (ex: P(Suspeito|Fraude)=80%)</p></div>
-      <div><p><strong style="color:var(--a4)">P(E) — Evidência Marginal:</strong> P(evidência em qualquer hipótese) (ex: P(Suspeito)=17%)</p></div>
-      <div><p><strong style="color:var(--a5)">P(H|E) — Posterior:</strong> Crença ATUALIZADA após a evidência (ex: ≈47%)</p></div>
-    </div>
+    <div class="card"><div class="ch"><span class="ci">🔄</span><div><h3>Pipelines de Dados</h3></div></div><p>Mecanismos para movimentação, transformação e ingestão de dados.</p></div>
+    <div class="card"><div class="ch"><span class="ci">☁️</span><div><h3>Armazenamento em Nuvem</h3></div></div><p>Repositórios escaláveis para dados brutos e estruturados.</p></div>
+    <div class="card"><div class="ch"><span class="ci">💻</span><div><h3>Computação em Nuvem</h3></div></div><p>Recursos de processamento elástico para cargas analíticas e transacionais.</p></div>
+    <div class="card"><div class="ch"><span class="ci">🤖</span><div><h3>Modelos de IA e ML</h3></div></div><p>Algoritmos avançados para percepção, predição e automação.</p></div>
+    <div class="card"><div class="ch"><span class="ci">📡</span><div><h3>Streaming de Dados</h3></div></div><p>Ingestão contínua em tempo real para tomada de decisão imediata.</p></div>
+    <div class="card"><div class="ch"><span class="ci">🐳</span><div><h3>Orquestração de Containers</h3></div></div><p>Gerenciamento e implantação automatizada de serviços e microserviços.</p></div>
   </div>
 
-  <div class="sub">🏦 Exercício Resolvido — Detecção de Fraude (2.000 transações)</div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Condição</th><th>Suspeito</th><th>Normal</th><th>Total</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Fraude</strong></td><td>160</td><td>40</td><td>200</td></tr>
-        <tr><td><strong>Legítima</strong></td><td>180</td><td>1.620</td><td>1.800</td></tr>
-        <tr><td><strong>Total</strong></td><td>340</td><td>1.660</td><td>2.000</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="grid g2">
-    <div class="card"><p><strong>P(Fraude) =</strong> 200/2000 = <strong style="color:var(--a1)">10%</strong></p><p><strong>P(Suspeito|Fraude) =</strong> 160/200 = <strong style="color:var(--a4)">80%</strong></p></div>
-    <div class="card"><p><strong>P(Fraude|Suspeito) =</strong> 160/340 ≈ <strong style="color:var(--a6)">47%</strong></p><p>Mais da metade dos suspeitos são legítimos!</p></div>
-  </div>
-  <div class="hl hl-r"><strong>Lição Crítica:</strong> Mesmo 80% das fraudes sendo suspeitas, se uma transação for suspeita, a chance REAL de fraude é apenas ≈47%. Comportamento suspeito não é prova conclusiva — é o efeito da taxa base (9x mais transações legítimas).</div>
-</section>
-
-<!-- ABA 5 -->
-<section id="a5" class="sec">
-  <div class="sh"><div class="si" style="background:rgba(245,158,11,.1);color:var(--a5)">🌳</div><div><h2>Modelos de Machine Learning</h2><p>Classificação · Regressão · Clustering · Avaliação · Overfitting</p></div></div>
-
-  <div class="sub">🌳 Principais Modelos de Classificação</div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Modelo</th><th>Princípio</th><th>Pontos Fortes</th><th>Limitações</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Regressão Logística</strong></td><td>Função sigmoide que modela probabilidades</td><td>Rápida, interpretável, ótima baseline</td><td>Fronteira apenas linear</td></tr>
-        <tr><td><strong>Árvore de Decisão</strong></td><td>Divisões recursivas com regras "se-então"</td><td>Altamente explicável, captura não-linearidade</td><td>Propenso a overfitting</td></tr>
-        <tr><td><strong>Random Forest</strong></td><td>Ensemble de árvores com dados aleatórios</td><td>Robusto, excelente em dados tabulares</td><td>Caixa-preta, maior custo computacional</td></tr>
-        <tr><td><strong>KNN</strong></td><td>Voto dos k vizinhos euclidianos mais próximos</td><td>Simples, sem fase de treino formal</td><td>Sensível à escala; lento na inferência</td></tr>
-        <tr><td><strong>SVM</strong></td><td>Hiperplano que maximiza margem de separação</td><td>Eficiente em alta dimensionalidade</td><td>Sensível à escala; difícil interpretação</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="sub">📊 Matriz de Confusão</div>
-  <div class="cm">
-    <div class="cm-c" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25)"><p style="font-size:.72rem;color:var(--muted)">Real Positivo · Predito Positivo</p><p style="font-weight:800;color:var(--a4);font-size:1.1rem">VP ✅</p><p style="font-size:.72rem">Verdadeiro Positivo</p></div>
-    <div class="cm-c" style="background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.25)"><p style="font-size:.72rem;color:var(--muted)">Real Positivo · Predito Negativo</p><p style="font-weight:800;color:var(--a6);font-size:1.1rem">FN ❌</p><p style="font-size:.72rem">Falso Negativo (Erro Tipo II)</p></div>
-    <div class="cm-c" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25)"><p style="font-size:.72rem;color:var(--muted)">Real Negativo · Predito Positivo</p><p style="font-weight:800;color:var(--a5);font-size:1.1rem">FP ⚠️</p><p style="font-size:.72rem">Falso Positivo (Erro Tipo I)</p></div>
-    <div class="cm-c" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25)"><p style="font-size:.72rem;color:var(--muted)">Real Negativo · Predito Negativo</p><p style="font-weight:800;color:var(--a4);font-size:1.1rem">VN ✅</p><p style="font-size:.72rem">Verdadeiro Negativo</p></div>
-  </div>
-
-  <div class="sub">📏 Métricas de Classificação</div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Métrica</th><th>Fórmula</th><th>Quando Priorizar</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Acurácia</strong></td><td>(VP+VN) / Total</td><td>Classes balanceadas. <strong>Enganosa em dados desbalanceados!</strong></td></tr>
-        <tr><td><strong>Precisão</strong></td><td>VP / (VP+FP)</td><td>Quando FP custa caro (ex: bloquear cliente legítimo).</td></tr>
-        <tr><td><strong>Recall</strong></td><td>VP / (VP+FN)</td><td>Quando FN é inadmissível (ex: fraude, diagnóstico grave).</td></tr>
-        <tr><td><strong>F1-Score</strong></td><td>2×(P×R)/(P+R)</td><td>Equilíbrio entre Precisão e Recall em classes desbalanceadas.</td></tr>
-        <tr><td><strong>AUC-ROC</strong></td><td>Área sob curva ROC</td><td>0,5 = aleatório · 1,0 = perfeito. Todos os limiares.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="hl hl-r"><strong>⚠️ Paradoxo da Acurácia:</strong> Base com 99% normal e 1% de fraudes → modelo que chuta sempre "normal" tem 99% de acurácia, mas <strong>0% de Recall para fraudes</strong>. Completamente inútil!</div>
-
-  <div class="sub">📉 Overfitting vs. Underfitting</div>
+  <div class="sub">📐 Frameworks de Arquitetura</div>
   <div class="grid g3">
-    <div class="card btg"><h3 style="color:var(--a4);margin-bottom:.4rem">✅ Ideal</h3><p>Treino bom + Teste bom. Modelo generaliza adequadamente.</p></div>
-    <div class="card btr"><h3 style="color:var(--a6);margin-bottom:.4rem">❌ Overfitting</h3><p>Treino excelente + Teste fraco. Memorizou ruídos.</p><p><strong>Solução:</strong> Regularização, mais dados, validação cruzada.</p></div>
-    <div class="card bta"><h3 style="color:var(--a5);margin-bottom:.4rem">⚠️ Underfitting</h3><p>Treino fraco + Teste fraco. Modelo muito simples.</p><p><strong>Solução:</strong> Modelo mais complexo, mais features.</p></div>
+    <div class="card bta"><h3 style="color:var(--a1);margin-bottom:.4rem">DAMA-DMBOK-2</h3><p>Guia abrangente cobrindo funções de gestão de dados, governança, segurança, qualidade e ciclo de vida da informação.</p></div>
+    <div class="card bty"><h3 style="color:var(--a4);margin-bottom:.4rem">Zachman Framework</h3><p>Estrutura matricial 6x6 para Arquitetura Empresarial. Perspectivas holísticas desde o escopo até a implementação operacional.</p></div>
+    <div class="card btg"><h3 style="color:var(--a3);margin-bottom:.4rem">TOGAF Framework</h3><p>The Open Group Architecture Framework com o método ADM (Architecture Development Method) para projeto corporativo de TI.</p></div>
   </div>
 
-  <div class="sub">🔵 Clustering — Algoritmos Comparados</div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Método</th><th>Principal Vantagem</th><th>Principal Desafio</th></tr></thead>
-      <tbody>
-        <tr><td><strong>K-Means</strong></td><td>Simples, intuitivo, muito rápido</td><td>Exige definir k; vulnerável a outliers; grupos esféricos apenas</td></tr>
-        <tr><td><strong>Hierárquico</strong></td><td>Dendrograma multiescala, dispensa k fixo</td><td>Custo O(n²/n³); inviável para bases volumosas</td></tr>
-        <tr><td><strong>DBSCAN</strong></td><td>Detecta formas arbitrárias e filtra outliers</td><td>Sensível a densidades variáveis; ajuste de ε difícil</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="hl hl-p"><strong>Avaliação de clusters:</strong> <strong>Inércia</strong> — Método do Cotovelo (ponto de inflexão). <strong>Silhouette Score</strong> — -1 a +1. Perto de +1: clusters densos e bem separados.</div>
-  <div class="hl hl-b"><strong>PCA (Redução de Dimensionalidade):</strong> Transforma atributos correlacionados em Componentes Principais ortogonais. Usado para visualização 2D, eliminação de multicolinearidade. ⚠️ Não é classificador — perde interpretabilidade direta.</div>
-</section>
-
-<!-- ABA 6 -->
-<section id="a6" class="sec">
-  <div class="sh"><div class="si" style="background:rgba(251,113,133,.1);color:var(--a6)">🍊</div><div><h2>Orange Data Mining</h2><p>Programação visual · Widgets · Dataset Iris · Learner vs Model · Métricas</p></div></div>
-  <div class="hl hl-b"><strong>O que é o Orange:</strong> Software livre de Ciência de Dados e ML baseado em <strong>programação visual</strong>. O usuário conecta <strong>widgets</strong> em um canvas para construir pipelines sem código. É reativo — alteração num widget atualiza automaticamente todos os widgets downstream.</div>
-
-  <div class="sub">🔄 Python vs. Orange — Mesma Lógica</div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Estágio</th><th>Python</th><th>Orange (Visual)</th></tr></thead>
-      <tbody>
-        <tr><td>Carregar dados</td><td><code>pd.read_csv(...)</code></td><td>Widget <strong>File</strong></td></tr>
-        <tr><td>Tratamento</td><td><code>StandardScaler(), SimpleImputer()</code></td><td>Widget <strong>Preprocess</strong></td></tr>
-        <tr><td>Treinamento</td><td><code>model.fit(X_train, y_train)</code></td><td>Widgets de algoritmos (Random Forest, Tree)</td></tr>
-        <tr><td>Avaliação</td><td><code>cross_val_score()</code></td><td>Widget <strong>Test &amp; Score</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="sub">📦 As 6 Categorias de Widgets</div>
-  <div class="grid g2">
-    <div class="card btp"><div class="ch"><span class="ci">📂</span><div><h3>Data</h3></div></div><p>File, Data Table, Select Rows, Select Columns — carregamento e inspeção.</p></div>
-    <div class="card btb"><div class="ch"><span class="ci">🔧</span><div><h3>Transform</h3></div></div><p>Limpeza, imputação, normalização, discretização, engenharia de atributos.</p></div>
-    <div class="card btg"><div class="ch"><span class="ci">📊</span><div><h3>Visualize</h3></div></div><p>Scatter Plot, Distributions, Box Plot, Violin Plot — exploração gráfica.</p></div>
-    <div class="card bta"><div class="ch"><span class="ci">🤖</span><div><h3>Model</h3></div></div><p>Árvore, Random Forest, Regressão Logística, Naive Bayes, SVM, Redes Neurais.</p></div>
-    <div class="card btr"><div class="ch"><span class="ci">📏</span><div><h3>Evaluate</h3></div></div><p>Test &amp; Score, Confusion Matrix, ROC Analysis — comparação e diagnóstico.</p></div>
-    <div class="card btv"><div class="ch"><span class="ci">🔵</span><div><h3>Unsupervised</h3></div></div><p>K-Means, Hierarchical Clustering, PCA, t-SNE — exploração sem rótulos.</p></div>
-  </div>
-
-  <div class="sub">🏷️ Papéis das Colunas (Select Columns)</div>
-  <div class="grid g2">
-    <div class="card btb"><h3 style="color:var(--a3);margin-bottom:.4rem">Features</h3><p>Variáveis de entrada usadas pelo modelo para aprender padrões e gerar previsões.</p></div>
-    <div class="card btg"><h3 style="color:var(--a4);margin-bottom:.4rem">Target / Class</h3><p>A variável alvo que o modelo deve aprender a prever.</p></div>
-    <div class="card bta"><h3 style="color:var(--a5);margin-bottom:.4rem">Meta Attributes</h3><p>Identificadores (nome, ID, CPF). Preservados para inspeção, <strong>mas NÃO usados no treino!</strong></p></div>
-    <div class="card btr"><h3 style="color:var(--a6);margin-bottom:.4rem">Dropped</h3><p>Colunas completamente excluídas do pipeline analítico.</p></div>
-  </div>
-
-  <div class="sub">⚠️ Learner vs. Model — Conceito Cobrado em Prova</div>
-  <div class="card">
-    <div class="grid g2">
-      <div style="border-right:1px solid var(--bord);padding-right:1rem">
-        <h3 style="color:var(--a1);margin-bottom:.5rem">📖 Learner (Aprendiz)</h3>
-        <p style="font-size:.85rem">Algoritmo em estado puro, <strong>sem dados</strong>, com apenas hiperparâmetros configurados. É conectado ao <strong>Test &amp; Score</strong> para validação cruzada justa.</p>
-      </div>
-      <div style="padding-left:1rem">
-        <h3 style="color:var(--a4);margin-bottom:.5rem">🧠 Model (Treinado)</h3>
-        <p style="font-size:.85rem">Resultado do Learner após processar dados de treino. É conectado ao <strong>Predictions</strong> para inferência em novos dados.</p>
-      </div>
+  <div class="sub">🏛️ Paradigmas Estruturais Fundamentais</div>
+  <div class="grid g3">
+    <div class="card bta">
+      <h3 style="color:var(--a1);margin-bottom:.4rem">Centralizada</h3>
+      <p><strong>Única Fonte da Verdade</strong></p>
+      <p>Dados corporativos em ambiente único e unificado.</p>
+      <p style="margin-top:.4rem"><strong>✅ Benefícios:</strong> Consistência superior, controle simplificado, análise integrada.</p>
+      <p><strong>❌ Desafios:</strong> Adaptabilidade lenta, gargalos na TI.</p>
+      <p><strong>🎯 Uso:</strong> Organizações estáveis e fortemente reguladas.</p>
+    </div>
+    <div class="card bty">
+      <h3 style="color:var(--a4);margin-bottom:.4rem">Federada</h3>
+      <p><strong>Autonomia com Integração</strong></p>
+      <p>Gestão descentralizada por domínios com interoperabilidade via APIs/Eventos.</p>
+      <p style="margin-top:.4rem"><strong>✅ Benefícios:</strong> Autonomia local, alta escala, resiliência.</p>
+      <p><strong>❌ Desafios:</strong> Consistência entre domínios, complexidade de integração.</p>
+      <p><strong>🎯 Uso:</strong> Empresas diversificadas ou multi-regionais.</p>
+    </div>
+    <div class="card btg">
+      <h3 style="color:var(--a3);margin-bottom:.4rem">Distribuída</h3>
+      <p><strong>Dados e processamento espalhados por nós/regiões.</strong></p>
+      <p><strong>Recursos:</strong> Particionamento, replicação, protocolos de consenso, roteamento geográfico.</p>
+      <p style="margin-top:.4rem"><strong>❌ Desafios:</strong> Teorema CAP/PACELC, conflitos de escrita cross-region.</p>
+      <p><strong>🎯 Aplicações:</strong> Plataformas globais, IoT/Edge, streaming de alto volume.</p>
     </div>
   </div>
 
-  <div class="sub">🌸 Dataset Iris — Roteiro Passo a Passo</div>
-  <div class="hl hl-b" style="margin-bottom:.8rem"><strong>Dataset:</strong> 150 amostras · 4 features (comprimento/largura de sépala e pétala) · 3 classes: Setosa, Versicolor, Virginica · 50 amostras por classe.</div>
-  <div class="card">
-    <div class="tl">
-      <div class="ti"><div class="td-dot"></div><h4>1. File → Data Table</h4><p>Carregar Iris e inspecionar colunas, tipos e registros.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>2. Scatter Plot (petal length × petal width)</h4><p>Setosa fica completamente isolada no quadrante inferior. Versicolor e Virginica se sobrepõem.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>3. Test &amp; Score com Tree + Random Forest + Logistic Regression</h4><p>Comparar CA, F1 e AUC em Validação Cruzada k-fold.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>4. Confusion Matrix</h4><p>Versicolor↔Virginica se confundem. Clicar na célula → Data Table para inspecionar os casos errados.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ABA 7 -->
-<section id="a7" class="sec">
-  <div class="sh"><div class="si" style="background:rgba(56,189,248,.1);color:var(--a7)">📋</div><div><h2>Revisão &amp; Projetos de Machine Learning</h2><p>CRISP-DM · Formulação do Problema · Métricas Avançadas · Flashcards</p></div></div>
-  <div class="quote">A escolha do algoritmo vem DEPOIS da definição correta do problema. Métricas altas não compensam formulações erradas ou premissas violadas.</div>
-
-  <div class="sub">🔄 Ciclo de Vida CRISP-DM</div>
-  <div class="card">
-    <div class="tl">
-      <div class="ti"><div class="td-dot"></div><h4>1. Business Understanding</h4><p>Definir o problema, identificar stakeholders, avaliar riscos e estabelecer critérios de sucesso.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>2. Data Understanding</h4><p>Localizar fontes de dados, avaliar qualidade, cobertura e identificar possíveis vieses.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>3. Data Preparation</h4><p>Integrar bases, limpar inconsistências, transformar atributos e separar os conjuntos.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>4. Modeling</h4><p>Treinar algoritmos e calibrar hiperparâmetros compatíveis com a natureza do problema.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>5. Evaluation</h4><p>Verificar métricas técnicas e validar utilidade real para o negócio.</p></div>
-      <div class="ti"><div class="td-dot"></div><h4>6. Deployment</h4><p>Integrar em produção, monitorar concept drift e atualizar periodicamente.</p></div>
-    </div>
-  </div>
-
-  <div class="sub">📏 Métricas de Regressão</div>
+  <div class="sub">⚡ OLTP vs. OLAP</div>
   <div class="tw">
     <table>
-      <thead><tr><th>Métrica</th><th>Fórmula</th><th>Característica</th></tr></thead>
+      <thead><tr><th>Característica</th><th>OLTP — Executar o Negócio</th><th>OLAP — Compreender o Negócio</th></tr></thead>
       <tbody>
-        <tr><td><strong>MAE</strong></td><td>Σ|y−ŷ| / n</td><td>Desvio médio na unidade original. Menos sensível a outliers.</td></tr>
-        <tr><td><strong>RMSE</strong></td><td>√(Σ(y−ŷ)² / n)</td><td>Penaliza severamente erros grandes. Na unidade original.</td></tr>
-        <tr><td><strong>R²</strong></td><td>1 − SS_res/SS_tot</td><td>Fração da variância explicada. Pode ser negativo se pior que a média!</td></tr>
+        <tr><td><strong>Foco</strong></td><td>Transações em tempo real (pedidos, CRM, pagamentos)</td><td>Tomada de decisão estratégica e análise histórica</td></tr>
+        <tr><td><strong>Design</strong></td><td>Esquema normalizado, conformidade ACID</td><td>Esquema dimensional (Star / Snowflake), agregações</td></tr>
+        <tr><td><strong>Dados</strong></td><td>Detalhados, atuais, constantemente atualizados</td><td>Históricos, consolidados e estruturados</td></tr>
       </tbody>
     </table>
   </div>
 
-  <div class="sub">🚨 Regularização: Ridge vs. Lasso</div>
-  <div class="grid g2">
-    <div class="card btb"><h3 style="color:var(--a3);margin-bottom:.4rem">Ridge (L2)</h3><div class="formula">Penalidade: λΣwⱼ²</div><p>Encolhe coeficientes, mas <strong>não os zera</strong>. Indicado para multicolinearidade.</p></div>
-    <div class="card btp"><h3 style="color:var(--a1);margin-bottom:.4rem">Lasso (L1)</h3><div class="formula">Penalidade: λΣ|wⱼ|</div><p>Força coeficientes a <strong>zero</strong> — age como seleção automática de atributos.</p></div>
+  <div class="card" style="margin-top:.8rem">
+    <h3 style="color:var(--a1);margin-bottom:.5rem">🔀 HTAP — Hybrid Transactional/Analytical Processing</h3>
+    <p>Combina OLTP e OLAP na mesma plataforma. Elimina o atraso entre a geração do dado e o insight analítico, permitindo análises em tempo real sobre dados operacionais ativos.</p>
+    <p style="margin-top:.4rem"><strong>Ferramentas de integração:</strong> ETL/ELT · CDC (Change Data Capture) · Streaming</p>
   </div>
 
-  <div class="sub">📊 Exemplo Numérico — Classificação</div>
-  <div class="card">
-    <p style="font-size:.85rem;margin-bottom:.6rem"><strong>Dados:</strong> VP=800, FP=600, FN=50, VN=8.550</p>
-    <div class="grid g2">
-      <div><div class="formula">Recall = 800/(800+50) ≈ 94,1%</div><p style="font-size:.82rem;color:var(--muted)">Alta detecção, poucos positivos perdidos.</p></div>
-      <div><div class="formula">Precisão = 800/(800+600) ≈ 57,1%</div><p style="font-size:.82rem;color:var(--muted)">Volume considerável de falsos alarmes gerados.</p></div>
+  <div class="sub">🗄️ Padrões de Armazenamento</div>
+  <div class="grid g3">
+    <div class="card bta">
+      <div class="ch"><span class="ci">🏢</span><div><h3>Data Warehouse</h3></div></div>
+      <p>Sistema curado com <strong>schema-on-write</strong>, otimizado para dados estruturados, relatórios formais e BI.</p>
+    </div>
+    <div class="card btg">
+      <div class="ch"><span class="ci">🏞️</span><div><h3>Data Lake</h3></div></div>
+      <p>Repositório flexível com <strong>schema-on-read</strong> para grandes volumes de dados brutos e não estruturados.</p>
+    </div>
+    <div class="card bty">
+      <div class="ch"><span class="ci">🏠</span><div><h3>Data Lakehouse</h3></div></div>
+      <p>Arquitetura <strong>unificada</strong> que adiciona governança, suporte ACID e confiabilidade de warehouse sobre a flexibilidade do lake.</p>
+      <p style="margin-top:.3rem"><strong>Tecnologias:</strong> Delta Lake · Apache Iceberg · Apache Hudi</p>
+      <p><strong>Suporta:</strong> ML · Streaming · BI em uma única plataforma.</p>
     </div>
   </div>
 
-  <div class="sub">🧠 Flashcards de Revisão Rápida</div>
+  <div class="sub">🚀 Evolução Moderna: Data Mesh &amp; Data Fabric</div>
   <div class="grid g2">
-    <div class="card"><p style="font-weight:700;color:var(--a3)">IA › ML › DL — qual a relação?</p><p>São subconjuntos aninhados. Toda DL é ML que é IA. IA Generativa é subárea do DL.</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">Qual medida é robusta a outliers?</p><p><strong>Mediana</strong> — divide os dados ao meio e não é afetada por extremos. Média é distorcida.</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">Quando usar Recall vs. Precisão?</p><p><strong>Recall:</strong> quando FN é grave (câncer, fraude). <strong>Precisão:</strong> quando FP é grave (spam, bloqueio indevido).</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">O que é Teorema de Bayes?</p><p>P(H|E) = P(E|H)×P(H) / P(E). Atualiza crença (Prior → Posterior) ao incorporar nova evidência.</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">O que é Data Leakage?</p><p>Informação do futuro vaza para o treino. Métricas infladas em laboratório, falha em produção.</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">Learner vs. Model no Orange?</p><p><strong>Learner:</strong> algoritmo puro → Test &amp; Score. <strong>Model:</strong> algoritmo treinado → Predictions.</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">Por que não descartar todos os outliers?</p><p>Outlier pode ser fraude ou falha crítica — o sinal mais importante do negócio. Investigar antes de remover.</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">Mutuamente Exclusivos vs. Independentes?</p><p><strong>Exclusivos:</strong> P(A∩B)=0 (não coocorrem). <strong>Independentes:</strong> P(A∩B)=P(A)×P(B) (um não afeta o outro).</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">K-Means — por que padronizar?</p><p>Variáveis de maior magnitude dominam a distância euclidiana e anulam as demais. Sempre normalizar antes.</p></div>
-    <div class="card"><p style="font-weight:700;color:var(--a3)">Qual é o CRISP-DM?</p><p>Metodologia: Business Understanding → Data Understanding → Data Preparation → Modeling → Evaluation → Deployment.</p></div>
+    <div class="card btv">
+      <div class="ch"><span class="ci">🕸️</span><div><h3>Data Mesh</h3></div></div>
+      <p><strong>Propriedade Descentralizada:</strong> Domínios de negócio gerenciam e publicam seus próprios "produtos de dados".</p>
+      <p style="margin-top:.3rem">Muda a mentalidade organizacional para tratar <strong>dados como produto de primeira classe</strong>.</p>
+      <p style="margin-top:.3rem"><strong>Define:</strong> QUEM é o dono dos dados.</p>
+    </div>
+    <div class="card bty">
+      <div class="ch"><span class="ci">🧵</span><div><h3>Data Fabric</h3></div></div>
+      <p><strong>Conectividade Inteligente:</strong> Camada orientada por IA e metadados ativos que conecta todas as fontes automaticamente.</p>
+      <p style="margin-top:.3rem">Garante descoberta, automação e acesso contínuo aos dados em toda a empresa.</p>
+      <p style="margin-top:.3rem"><strong>Define:</strong> COMO os dados se conectam de forma inteligente.</p>
+    </div>
   </div>
-  <div class="hl hl-p" style="text-align:center;font-size:.95rem;font-weight:700;margin-top:1.5rem">🎯 "Garbage In, Garbage Out — algoritmos sofisticados não compensam dados incorretos."</div>
+  <div class="quote" style="font-size:.9rem">"Data Mesh define QUEM é o dono dos dados; Data Fabric define COMO os dados se conectam de forma inteligente na empresa." — Diretrizes de Arquitetura de Dados Empresarial</div>
+
+  <div class="sub">✅ Melhores Práticas de Arquitetura</div>
+  <div class="grid g2">
+    <div class="card"><div class="ch"><span class="ci">☁️</span><div><h3>Nativo da Nuvem (Cloud-Native)</h3></div></div><p>Aproveita o desacoplamento de computação e armazenamento para escala elástica.</p></div>
+    <div class="card"><div class="ch"><span class="ci">🔄</span><div><h3>Pipelines de Dados Robustos</h3></div></div><p>Constrói fluxos resilientes e escaláveis com suporte a processamento em tempo real.</p></div>
+    <div class="card"><div class="ch"><span class="ci">🧩</span><div><h3>Desacoplado e Extensível</h3></div></div><p>Adota design orientado a domínios com interfaces claras e padronizadas.</p></div>
+    <div class="card"><div class="ch"><span class="ci">⚖️</span><div><h3>Governança Equilibrada</h3></div></div><p>Automatiza a segurança e conformidade sem sufocar a agilidade dos domínios e custos.</p></div>
+  </div>
 </section>
 
 </main>
@@ -540,3 +490,4 @@
 </script>
 </body>
 </html>
+
